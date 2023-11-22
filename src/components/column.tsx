@@ -13,7 +13,7 @@ function SCSColumn(params: SCSColumnParams) {
         <CardHeader className="SCSColHeader">
           <div className="fw-bold">{params.title}</div>
         </CardHeader>
-        <CardBody>{params.children}</CardBody>
+        <CardBody className="SCSColBody">{params.children}</CardBody>
       </Card>
     </>
   );

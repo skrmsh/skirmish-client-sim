@@ -1,9 +1,13 @@
 .SCSColumn {
     margin-top: 1rem;
     padding: 1rem;
-    min-height: calc(99vh - 60px - 1rem);
+    height: calc(99vh - 60px - 1rem);
 }
 
 .SCSColHeader {
     text-align: center;
+}
+
+.SCSColBody {
+    overflow-y: scroll;
 }
