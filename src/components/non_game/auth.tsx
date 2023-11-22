@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
+import { UserApi } from "../../Api/generated";
+import { AxiosError, AxiosResponse } from "axios";
 
 interface AuthInputParams {
-  authCallback: CallableFunction;
+  userApi: UserApi;
+  setAccessToken: CallableFunction;
 }
 
 function AuthInput(params: AuthInputParams) {
@@ -31,7 +34,18 @@ function AuthInput(params: AuthInputParams) {
           className="mt-2 w-100"
           onClick={() => {
             if (!!email && !!password) {
-              params.authCallback(email, password);
+              params.userApi
+                .authPost({
+                  email: email,
+                  password: password,
+                })
+                .catch(() => {})
+                .then((e: void | AxiosResponse) => {
+                  if (e && e.data.message === "authenticated") {
+                    console.log(e);
+                    params.setAccessToken(e.data.access_token);
+                  }
+                });
             }
           }}
         >

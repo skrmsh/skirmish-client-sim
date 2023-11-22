@@ -15,7 +15,6 @@ import LogDisplay from "./components/other/log";
 import { useEffect, useState } from "react";
 import { getApiConfiguration } from "./util/helperFunctions";
 import { UserApi } from "./Api/generated";
-import { AxiosError, AxiosResponse } from "axios";
 
 const __DEV__ = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
 
@@ -47,22 +46,7 @@ function App() {
           <Col>
             <SCSColumn title="Non-Game / API Functions">
               <span className="text-white fw-bold">Authenticate</span>
-              <AuthInput
-                authCallback={(email: string, password: string) => {
-                  userAPI
-                    .authPost({
-                      email: email,
-                      password: password,
-                    })
-                    .catch(() => {})
-                    .then((e: void | AxiosResponse) => {
-                      if (e && e.data.message === "authenticated") {
-                        console.log(e);
-                        setAccessToken(e.data.access_token);
-                      }
-                    });
-                }}
-              />
+              <AuthInput userApi={userAPI} setAccessToken={setAccessToken} />
               <hr />
               <span className="text-white fw-bold">Create Game</span>
               <CreateGame />
