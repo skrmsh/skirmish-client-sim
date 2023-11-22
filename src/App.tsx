@@ -1,5 +1,5 @@
 import "./App.css";
-import "bootswatch/dist/superhero/bootstrap.min.css";
+import "bootswatch/dist/cyborg/bootstrap.min.css";
 import SCSColumn from "./components/column";
 import { Col, Row } from "react-bootstrap";
 import StatusBar from "./components/statusbar";
@@ -9,11 +9,28 @@ import JoinGame from "./components/non_game/join_game";
 import StartGame from "./components/non_game/start_game";
 import ShootTrigger from "./components/visible/shoot";
 import GotHit from "./components/visible/got_hit";
-import InvisibleFunctions from "./components/invisible_functions";
-import StatusDisplay from "./components/status";
-import LogDisplay from "./components/log";
+import InvisibleFunctions from "./components/other/invisible_functions";
+import StatusDisplay from "./components/other/status";
+import LogDisplay from "./components/other/log";
+import { useState } from "react";
+
+const __DEV__ = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
 
 function App() {
+  const [serverUrl, setServerUrl] = useState(
+    __DEV__
+      ? "skirmish.olel.de"
+      : `${window.location.hostname}:${window.location.port}`
+  );
+  const [secureConnection, setSecureConnection] = useState(
+    __DEV__ ? true : false
+  );
+
+  const [connectionState, setConnectionState] = useState(false);
+  const [accessToken, setAccessToken] = useState(
+    "9d34bc3fe362a0607b4edddbd821fa34"
+  );
+
   return (
     <div className="App">
       <div className="ColumnsContainer">
@@ -60,7 +77,14 @@ function App() {
         </Row>
       </div>
       <footer className="footer bg-dark text-light">
-        <StatusBar></StatusBar>
+        <StatusBar
+          serverUrl={serverUrl}
+          setServerUrl={setServerUrl}
+          secureConnection={secureConnection}
+          setSecureConnection={setSecureConnection}
+          connectionState={connectionState}
+          accessToken={accessToken}
+        />
       </footer>
     </div>
   );
