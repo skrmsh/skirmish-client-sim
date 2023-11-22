@@ -1,13 +1,21 @@
-import React from "react";
+import "./statusbar.css";
+import { Button, Col, Form, InputGroup } from "react-bootstrap";
 
 function StatusBar() {
   let connectionState = true;
   return (
-    <>
-      {connectionState ? <>🟢 Connected!</> : <>🔴 Not Connected!</>}
-      <span className="ms-5"></span>
-      ... ToDo
-    </>
+    <div className="StatusBar">
+      <div className="StatusElement">
+        <Form.Control type="text" placeholder="Server URL"></Form.Control>
+      </div>
+      <div className="StatusElement ms-1">
+        <Form.Check type="checkbox" label="Secure Connection"></Form.Check>
+      </div>
+      <div className="StatusElement ms-5">🟢 Connected to Server!</div>
+      <div className="StatusElement ms-5">
+        Access Token: o23fwpsdjf293jf9jdsklf293j (validated)
+      </div>
+    </div>
   );
 }
 

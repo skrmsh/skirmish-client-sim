@@ -1,0 +1,15 @@
+.StatusBar {
+    margin-left: 5rem;
+    margin-right: 5rem;
+    line-height: 60px;
+    display: inline-block;
+    vertical-align: center;
+}
+
+.StatusElement {
+    display: inline-block;
+}
+
+.form-check-input {
+    margin-top: 20px;
+}

@@ -24,9 +24,7 @@ function App() {
         </Row>
       </div>
       <footer className="footer bg-dark text-light">
-        <div className="container">
-          <StatusBar></StatusBar>
-        </div>
+        <StatusBar></StatusBar>
       </footer>
     </div>
   );
