@@ -9,7 +9,11 @@ function StatusBar() {
         <Form.Control type="text" placeholder="Server URL"></Form.Control>
       </div>
       <div className="StatusElement ms-1">
-        <Form.Check type="checkbox" label="Secure Connection"></Form.Check>
+        <Form.Check
+          type="checkbox"
+          label="Secure Connection"
+          className="SecureConnectionCheck"
+        ></Form.Check>
       </div>
       <div className="StatusElement ms-5">🟢 Connected to Server!</div>
       <div className="StatusElement ms-5">
