@@ -14,7 +14,7 @@ import StatusDisplay from "./components/other/status";
 import LogDisplay from "./components/other/log";
 import { useEffect, useState } from "react";
 import { getApiConfiguration } from "./util/helperFunctions";
-import { UserApi } from "./Api/generated";
+import { GameApi, UserApi } from "./Api/generated";
 
 const __DEV__ = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
 
@@ -34,9 +34,13 @@ function App() {
   const [userAPI, setUserAPI] = useState(
     new UserApi(getApiConfiguration(serverUrl, secureConnection))
   );
+  const [gameAPI, setGameAPI] = useState(
+    new GameApi(getApiConfiguration(serverUrl, secureConnection))
+  );
 
   useEffect(() => {
     setUserAPI(new UserApi(getApiConfiguration(serverUrl, secureConnection)));
+    setGameAPI(new GameApi(getApiConfiguration(serverUrl, secureConnection)));
   }, [serverUrl, secureConnection]);
 
   return (
@@ -49,7 +53,7 @@ function App() {
               <AuthInput userApi={userAPI} setAccessToken={setAccessToken} />
               <hr />
               <span className="text-white fw-bold">Create Game</span>
-              <CreateGame />
+              <CreateGame gameApi={gameAPI} />
               <hr />
               <span className="text-white fw-bold">Join Game</span>
               <JoinGame />
