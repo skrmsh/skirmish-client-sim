@@ -5,6 +5,13 @@
     max-height: calc(99vh - 60px - 1rem);
 }
 
+.SCSColumnHalfHeight {
+    margin-top: 1rem;
+    padding: 1rem;
+    min-height: calc(49.5vh - 30px - 1rem);
+    max-height: calc(49.5vh - 30px - 1rem);
+}
+
 .SCSColHeader {
     text-align: center;
 }
