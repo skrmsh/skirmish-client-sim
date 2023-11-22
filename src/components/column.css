@@ -3,6 +3,7 @@
     padding: 1rem;
     min-height: calc(99vh - 60px - 1rem);
     max-height: calc(99vh - 60px - 1rem);
+    overflow-y: scroll;
 }
 
 .SCSColumnHalfHeight {
@@ -10,12 +11,9 @@
     padding: 1rem;
     min-height: calc(49.5vh - 30px - 1rem);
     max-height: calc(49.5vh - 30px - 1rem);
+    overflow-y: scroll;
 }
 
 .SCSColHeader {
     text-align: center;
-}
-
-.SCSColBody {
-    overflow-y: scroll;
 }
