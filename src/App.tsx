@@ -38,10 +38,26 @@ function App() {
     new GameApi(getApiConfiguration(serverUrl, secureConnection))
   );
 
+  const [apiConfig, setApiConfig] = useState({
+    headers: {
+      "x-access-token": accessToken,
+    },
+  });
+
   useEffect(() => {
     setUserAPI(new UserApi(getApiConfiguration(serverUrl, secureConnection)));
     setGameAPI(new GameApi(getApiConfiguration(serverUrl, secureConnection)));
   }, [serverUrl, secureConnection]);
+
+  useEffect(() => {
+    setApiConfig({
+      headers: {
+        "x-access-token": accessToken,
+      },
+    });
+  }, [accessToken]);
+
+  const [gid, setGid] = useState("");
 
   return (
     <div className="App">
@@ -53,10 +69,14 @@ function App() {
               <AuthInput userApi={userAPI} setAccessToken={setAccessToken} />
               <hr />
               <span className="text-white fw-bold">Create Game</span>
-              <CreateGame gameApi={gameAPI} />
+              <CreateGame
+                gameApi={gameAPI}
+                apiConfig={apiConfig}
+                setGid={setGid}
+              />
               <hr />
               <span className="text-white fw-bold">Join Game</span>
-              <JoinGame />
+              <JoinGame gid={gid} />
               <hr />
               <span className="text-white fw-bold">StartGame</span>
               <StartGame />

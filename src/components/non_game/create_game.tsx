@@ -5,6 +5,8 @@ import { AxiosError, AxiosResponse } from "axios";
 
 interface CreateGameParams {
   gameApi: GameApi;
+  apiConfig: object;
+  setGid: CallableFunction;
 }
 
 function toTitleCase(str: string) {
@@ -46,7 +48,24 @@ function CreateGame(params: CreateGameParams) {
             ))}
           </Form.Select>
         </Form.Group>
-        <Button className="mt-2">Create</Button>
+        <Button
+          className="mt-2"
+          onClick={() => {
+            params.gameApi
+              .gameGidPost(
+                "0",
+                { gamemode: selectedGamemode },
+                params.apiConfig
+              )
+              .then((e) => {
+                if (e) {
+                  params.setGid(e.data.gid);
+                }
+              });
+          }}
+        >
+          Create
+        </Button>
       </Form>
     </>
   );

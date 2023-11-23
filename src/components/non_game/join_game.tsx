@@ -1,12 +1,16 @@
 import { Button, Form } from "react-bootstrap";
 
-function JoinGame() {
+interface JoinGameParams {
+  gid: string;
+}
+
+function JoinGame(params: JoinGameParams) {
   return (
     <>
       <Form>
         <Form.Group>
           <Form.Label>GID:</Form.Label>
-          <Form.Control type="text" placeholder="GID" />
+          <Form.Control type="text" placeholder="GID" value={params.gid} />
         </Form.Group>
         <Button className="mt-2">Join</Button>
       </Form>
