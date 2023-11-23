@@ -6,6 +6,11 @@ function StatusDisplay() {
     <Row>
       <Col>
         <div className="mt-1">
+          <span className="fw-bold">Running (Countdown): </span>
+          <br />
+          <pre>No (-1)</pre>
+        </div>
+        <div className="mt-1">
           <span className="fw-bold">GID / PID: </span>
           <br />
           <pre>WeirdName / 0</pre>
