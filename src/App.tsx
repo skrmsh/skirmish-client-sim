@@ -15,6 +15,7 @@ import LogDisplay from "./components/other/log";
 import { useEffect, useState } from "react";
 import { getApiConfiguration } from "./util/helperFunctions";
 import { GameApi, UserApi } from "./Api/generated";
+import SocketManager from "./util/socketManager";
 
 const __DEV__ = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
 
@@ -29,7 +30,11 @@ function App() {
   );
 
   const [connectionState, setConnectionState] = useState(false);
-  const [accessToken, setAccessToken] = useState("-");
+  SocketManager.Instance.onConnectionStateChanged((state: boolean) =>
+    setConnectionState(state)
+  );
+
+  const [accessToken, setAccessToken] = useState("");
 
   const [userAPI, setUserAPI] = useState(
     new UserApi(getApiConfiguration(serverUrl, secureConnection))
@@ -56,6 +61,12 @@ function App() {
       },
     });
   }, [accessToken]);
+
+  useEffect(() => {
+    if (!!accessToken && !!serverUrl) {
+      SocketManager.Instance.connectToServer(serverUrl, secureConnection);
+    }
+  }, [accessToken, serverUrl, secureConnection]);
 
   const [gid, setGid] = useState("");
 
