@@ -79,7 +79,7 @@ function App() {
               <JoinGame gid={gid} />
               <hr />
               <span className="text-white fw-bold">StartGame</span>
-              <StartGame />
+              <StartGame gameApi={gameAPI} apiConfig={apiConfig} gid={gid} />
               <hr />
             </SCSColumn>
           </Col>
