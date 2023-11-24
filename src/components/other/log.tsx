@@ -1,14 +1,14 @@
 import "./log.css";
 import { Col, Row } from "react-bootstrap";
 
-function LogDisplay() {
-  var logText = ``;
-  for (let i = 0; i < 150; i++) {
-    logText += "never\ngonna\ngive\nyou\nup!\n";
-  }
+interface LogDisplayParams {
+  log: string;
+}
+
+function LogDisplay(params: LogDisplayParams) {
   return (
     <>
-      <div className="log">{logText}</div>
+      <div className="log">{params.log}</div>
     </>
   );
 }

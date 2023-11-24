@@ -29,6 +29,12 @@ function App() {
     __DEV__ ? true : false
   );
 
+  const [logString, setLogString] = useState("");
+  function log(...s: string[]) {
+    setLogString(logString.concat(...s, "\n"));
+  }
+  SocketManager.Instance.setLog(log);
+
   const [connectionState, setConnectionState] = useState(false);
   SocketManager.Instance.onConnectionStateChanged((state: boolean) =>
     setConnectionState(state)
@@ -65,6 +71,7 @@ function App() {
   useEffect(() => {
     if (!!accessToken && !!serverUrl) {
       SocketManager.Instance.connectToServer(serverUrl, secureConnection);
+      SocketManager.Instance.authenticate(accessToken);
     }
   }, [accessToken, serverUrl, secureConnection]);
 
@@ -114,7 +121,7 @@ function App() {
           </Col>
           <Col>
             <SCSColumn title="Log">
-              <LogDisplay />
+              <LogDisplay log={logString} />
             </SCSColumn>
           </Col>
         </Row>
