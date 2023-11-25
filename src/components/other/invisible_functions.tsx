@@ -1,11 +1,37 @@
 import { Button, Form } from "react-bootstrap";
 import SocketManager from "../../util/socketManager";
+import { useEffect, useState } from "react";
+import TimeManager from "../../util/timeManager";
 
 function InvisibleFunctions() {
+  const [displayTime, setDisplayTime] = useState("");
+
+  useEffect(() => {
+    SocketManager.Instance.onMessage((msg: any) => {
+      if (msg.a?.includes(1)) {
+        // ACTION TIMESYNC
+        if (!!msg.TS) TimeManager.Instance.timesync(msg.TS);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    setInterval(() => {
+      let timestamp = TimeManager.Instance.getTime();
+      let date = new Date(timestamp * 1000);
+      let hours = date.getHours();
+      let minutes = "0" + date.getMinutes();
+      let seconds = "0" + date.getSeconds();
+      setDisplayTime(
+        hours + ":" + minutes.substr(-2) + ":" + seconds.substr(-2)
+      );
+    });
+  }, []);
+
   return (
     <>
       <span>
-        Current Time: <span>14:11:12</span>
+        Current Time: <span>{displayTime}</span>
       </span>
       <hr />
       <span>Keep Alive: ➡️</span>{" "}
