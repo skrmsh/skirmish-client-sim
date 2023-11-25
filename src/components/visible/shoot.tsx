@@ -3,7 +3,7 @@ import { Button, Form } from "react-bootstrap";
 import SocketManager from "../../util/socketManager";
 
 function ShootTrigger() {
-  const [doInc, setDoInc] = useState(false);
+  const [doInc, setDoInc] = useState(true);
   const [sid, setSid] = useState(0);
 
   return (
