@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SocketManager from "../../util/socketManager";
 import "./status.css";
 import { Col, Row } from "react-bootstrap";
+import TimeManager from "../../util/timeManager";
+import Logger from "../../util/logger";
 
 function parsePGTField(data: any, fieldName: string, setter: CallableFunction) {
   if (data[fieldName] !== undefined) {
@@ -38,8 +40,79 @@ function StatusDisplay() {
 
   // create useEffect to set these values
   const [isLightOn, setLightOn] = useState(true);
-  const [isPhaserEnabled, setPhaserEnabled] = useState(true);
+  const [isPhaserEnabled, setIsPhaserEnabled] = useState(true);
   const [isGameRunning, setGameRunning] = useState(true);
+  const [gameCountdown, setGameCountdown] = useState(NaN);
+  const [isPlayerInviolable, setIsPlayerInviolable] = useState(false);
+
+  const [timer, setTimer] = useState<any>(null);
+  const [currentTime, setCurrentTime] = useState(0);
+
+  useEffect(() => {
+    if (!!!timer) {
+      setTimer(
+        setInterval(() => {
+          let currentTime = TimeManager.Instance.getTime();
+          setCurrentTime(currentTime);
+        }, 1000)
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    // running / countdown
+    if (gameStartTime > 0) {
+      if (gameStartTime > currentTime) {
+        setGameRunning(false);
+        setGameCountdown(Math.floor(gameStartTime - currentTime));
+      } else {
+        setGameRunning(true);
+      }
+    } else {
+      setGameRunning(false);
+    }
+
+    // phaserEnabled
+    if (!!phaserDisableUntil) {
+      if (phaserEnable === false) setIsPhaserEnabled(false);
+      else if (phaserDisableUntil - currentTime > 0) setIsPhaserEnabled(false);
+      else setIsPhaserEnabled(true);
+    }
+
+    // Inviolable
+    if (!!playerInviolableUntil) {
+      if (playerInviolable === true) setIsPlayerInviolable(true);
+      else if (playerInviolableUntil - currentTime > 0)
+        setIsPlayerInviolable(true);
+      else setIsPlayerInviolable(false);
+    }
+  }, [
+    currentTime,
+    gameStartTime,
+    phaserDisableUntil,
+    phaserEnable,
+    playerInviolable,
+    playerInviolableUntil,
+  ]);
+
+  useEffect(() => {
+    if (isPlayerInviolable && playerInviolableLightsOff) {
+      setLightOn(false);
+      return;
+    }
+
+    if (!isPhaserEnabled) {
+      setLightOn(false);
+      return;
+    }
+
+    if (!isGameRunning && !playerColorBeforeGame) {
+      setLightOn(false);
+      return;
+    }
+
+    setLightOn(true);
+  }, [isPlayerInviolable, playerColorBeforeGame, isPhaserEnabled]);
 
   SocketManager.Instance.onMessage((data: any) => {
     parsePGTField(data, "p_id", setPid);
@@ -73,7 +146,9 @@ function StatusDisplay() {
         <div className="mt-1">
           <span className="fw-bold">Running (Countdown): </span>
           <br />
-          <pre>No (-1)</pre>
+          <pre>
+            {isGameRunning ? "Yes" : "No"} ({gameCountdown})
+          </pre>
         </div>
         <div className="mt-1">
           <span className="fw-bold">GID / PID: </span>
@@ -106,24 +181,26 @@ function StatusDisplay() {
               background: `rgba(${playerColorRed},${playerColorGreen},${playerColorBlue},255)`,
             }}
           ></div>
-          <pre style={{ display: "inline" }}> / On</pre>
+          <pre style={{ display: "inline" }}> / {isLightOn ? "Yes" : "No"}</pre>
         </div>
         <div className="mt-1">
           <span className="fw-bold">Max Shot Interval: </span>
           <br />
-          <pre>300ms</pre>
+          <pre>{maxShotInterval}ms</pre>
         </div>
         <div className="mt-1">
           <span className="fw-bold">Ammo: </span>
           <br />
-          <pre>-</pre>
+          <pre>{playerAmmo}</pre>
         </div>
       </Col>
       <Col>
         <div className="mt-1">
           <span className="fw-bold">Player Rank / Count: </span>
           <br />
-          <pre>1 / 2</pre>
+          <pre>
+            {playerRank} / {gamePlayerCount}
+          </pre>
         </div>
         <div className="mt-1">
           <span className="fw-bold">Team ID: </span>
@@ -143,17 +220,17 @@ function StatusDisplay() {
         <div className="mt-1">
           <span className="fw-bold">Phaser Enabled </span>
           <br />
-          <pre>🔫</pre>
+          <pre>{isPhaserEnabled ? "🔫" : ""}</pre>
         </div>
         <div className="mt-1">
           <span className="fw-bold">Inviolable: </span>
           <br />
-          <pre>🛡️</pre>
+          <pre>{isPlayerInviolable ? "🛡️" : ""}</pre>
         </div>
         <div className="mt-1">
-          <span className="fw-bold">Ammo Enabled: </span>
+          <span className="fw-bold">Ammo Limit Enabled: </span>
           <br />
-          <pre>No</pre>
+          <pre>{playerAmmoLimit ? "Yes" : "No"}</pre>
         </div>
       </Col>
     </Row>

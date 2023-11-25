@@ -1,5 +1,5 @@
 import "./App.css";
-import "bootswatch/dist/cyborg/bootstrap.min.css";
+import "bootswatch/dist/vapor/bootstrap.min.css";
 import SCSColumn from "./components/column";
 import { Col, Row } from "react-bootstrap";
 import StatusBar from "./components/statusbar";
