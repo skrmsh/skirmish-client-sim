@@ -1,5 +1,6 @@
 import { io } from "socket.io-client";
 import { getWSUrl } from "./helperFunctions";
+import Logger from "./logger";
 
 class SocketManager {
   private static _instance: SocketManager;
@@ -22,17 +23,21 @@ class SocketManager {
     this.socket = io(getWSUrl(host, secureConnection), {
       transports: ["websocket"],
     });
-    console.log("Hey there :)");
 
     this.socket.on("disconnect", () => {
+      Logger.log("Websocket: 'disconnect' event fired");
       this.connectionStateChangedCallbacks.forEach((cb) => cb(false));
     });
     this.socket.on("connect", () => {
+      Logger.log("Websocket: 'connect' event fired");
       this.connectionStateChangedCallbacks.forEach((cb) => cb(true));
     });
     this.socket.on("message", (data: string) => {
       this.onMessageCallbacks.forEach((cb) => cb(JSON.parse(data)));
-      this.logger("-- [WS RECEIVE] --\n", JSON.stringify(JSON.parse(data)));
+      Logger.log(
+        "Websocket: received data @ message:\n",
+        JSON.stringify(JSON.parse(data))
+      );
     });
   }
 
@@ -44,15 +49,16 @@ class SocketManager {
   }
 
   public authenticate(accessToken: string) {
+    Logger.log("Websocket: authenticating");
     this.socket.emit("join", { access_token: accessToken });
   }
 
   public send(data: object) {
     if (this.isConnected()) {
       this.socket.emit("message", data);
-      this.logger("-- [WS SEND] --\n", JSON.stringify(data));
+      Logger.log("Websocket: sending message:\n", JSON.stringify(data));
     } else {
-      this.logger("ERROR: Tried to send to closed socket!\n");
+      Logger.log("Websocket: ERROR: Tried to send to closed socket!\n");
     }
   }
 
@@ -64,11 +70,6 @@ class SocketManager {
   private onMessageCallbacks: Array<CallableFunction> = [];
   public onMessage(callback: CallableFunction) {
     this.onMessageCallbacks.push(callback);
-  }
-
-  private logger: CallableFunction = (e: string) => {};
-  public setLog(logFn: CallableFunction) {
-    this.logger = logFn;
   }
 }
 

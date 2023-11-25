@@ -29,12 +29,6 @@ function App() {
     __DEV__ ? true : false
   );
 
-  const [logString, setLogString] = useState("");
-  function log(...s: string[]) {
-    setLogString(logString.concat(...s, "\n"));
-  }
-  SocketManager.Instance.setLog(log);
-
   const [connectionState, setConnectionState] = useState(false);
   SocketManager.Instance.onConnectionStateChanged((state: boolean) =>
     setConnectionState(state)
@@ -94,7 +88,7 @@ function App() {
               />
               <hr />
               <span className="text-white fw-bold">Join Game</span>
-              <JoinGame gid={gid} />
+              <JoinGame setGid={setGid} gid={gid} />
               <hr />
               <span className="text-white fw-bold">StartGame</span>
               <StartGame gameApi={gameAPI} apiConfig={apiConfig} gid={gid} />
@@ -121,7 +115,7 @@ function App() {
           </Col>
           <Col>
             <SCSColumn title="Log">
-              <LogDisplay log={logString} />
+              <LogDisplay />
             </SCSColumn>
           </Col>
         </Row>

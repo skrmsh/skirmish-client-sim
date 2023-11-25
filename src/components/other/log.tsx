@@ -1,14 +1,25 @@
+import { useRef, useState } from "react";
+import Logger from "../../util/logger";
 import "./log.css";
-import { Col, Row } from "react-bootstrap";
 
-interface LogDisplayParams {
-  log: string;
-}
+function LogDisplay() {
+  const [logText, setLogText] = useState("");
 
-function LogDisplay(params: LogDisplayParams) {
+  const bottomEl = useRef<null | HTMLDivElement>(null);
+
+  Logger.Instance.onLog((rawText: string) => {
+    setLogText(rawText);
+    console.log(rawText);
+    setTimeout(() => {
+      bottomEl?.current?.scrollIntoView({ behavior: "auto", block: "end" });
+    }, 50);
+  });
+
   return (
     <>
-      <div className="log">{params.log}</div>
+      <div id="logContainer" className="log" ref={bottomEl}>
+        {logText}
+      </div>
     </>
   );
 }

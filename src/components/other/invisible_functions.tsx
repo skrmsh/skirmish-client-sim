@@ -1,4 +1,5 @@
 import { Button, Form } from "react-bootstrap";
+import SocketManager from "../../util/socketManager";
 
 function InvisibleFunctions() {
   return (
@@ -20,7 +21,16 @@ function InvisibleFunctions() {
         ></Form.Control>
       </Form.Group>
       <hr />
-      <Button className="w-100 btn-info">Request Full Data Update</Button>
+      <Button
+        className="w-100 btn-info"
+        onClick={() => {
+          SocketManager.Instance.send({
+            a: [12],
+          });
+        }}
+      >
+        Request Full Data Update
+      </Button>
     </>
   );
 }

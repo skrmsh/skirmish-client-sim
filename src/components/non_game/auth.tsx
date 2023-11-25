@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { UserApi } from "../../Api/generated";
 import { AxiosError, AxiosResponse } from "axios";
+import Logger from "../../util/logger";
 
 interface AuthInputParams {
   userApi: UserApi;
@@ -34,15 +35,18 @@ function AuthInput(params: AuthInputParams) {
           className="mt-2 w-100"
           onClick={() => {
             if (!!email && !!password) {
+              Logger.log("Auth: Sending auth request to API");
               params.userApi
                 .authPost({
                   email: email,
                   password: password,
                 })
-                .catch(() => {})
+                .catch((e) => {
+                  Logger.log("Auth: Failed: ", JSON.stringify(e.response.data));
+                })
                 .then((e: void | AxiosResponse) => {
                   if (e && e.data.message === "authenticated") {
-                    console.log(e);
+                    Logger.log("Auth: Authenticated!");
                     params.setAccessToken(e.data.access_token);
                   }
                 });
