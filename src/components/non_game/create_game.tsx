@@ -27,7 +27,7 @@ function CreateGame(params: CreateGameParams) {
         setSelectedGamemode(e.data.gamemodes[0]);
       }
     });
-  }, []);
+  }, [params.apiConfig]);
 
   return (
     <>
