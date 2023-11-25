@@ -1,6 +1,5 @@
 .ColorCircle {
     display: inline-block;
-    background-color: rgb(255, 33, 90);
     min-width: 1rem;
     min-height: 1rem;
     border-radius: 100%;

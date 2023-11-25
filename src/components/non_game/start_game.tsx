@@ -36,11 +36,7 @@ function StartGame(params: StartGameParams) {
                   console.log(e);
                 }
               })
-              .then((e) => {
-                if (e) {
-                  alert(e.data);
-                }
-              });
+              .then((e) => {});
           }}
         >
           Start
