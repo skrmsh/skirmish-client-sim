@@ -2,9 +2,11 @@ import { Button, Form } from "react-bootstrap";
 import SocketManager from "../../util/socketManager";
 import { useEffect, useState } from "react";
 import TimeManager from "../../util/timeManager";
+import Logger from "../../util/logger";
 
 function InvisibleFunctions() {
   const [displayTime, setDisplayTime] = useState("");
+  const [batteryValue, setBatteryValue] = useState(4200);
 
   useEffect(() => {
     SocketManager.Instance.onMessage((msg: any) => {
@@ -34,16 +36,34 @@ function InvisibleFunctions() {
         Current Time: <span>{displayTime}</span>
       </span>
       <hr />
-      <span>Keep Alive: ➡️</span>{" "}
-      {/*Show -> everytime ka was send for a short period (100ms or so)*/}
+      <span>
+        Keep Alive:{" "}
+        <Button
+          size="sm"
+          className="btn-secondary"
+          onClick={() => {
+            SocketManager.Instance.send({ a: [0] });
+          }}
+        >
+          ➡️
+        </Button>
+      </span>{" "}
       <hr />
       <Form.Group>
-        <Form.Label>Battery Voltage (3786mV)</Form.Label>
+        <Form.Label>Battery Voltage ({batteryValue}mV)</Form.Label>
         <Form.Control
           type="range"
           className="form-range"
           min={3200}
           max={4200}
+          value={batteryValue}
+          onChange={(e) => {
+            setBatteryValue(parseInt(e.target.value));
+            SocketManager.Instance.send({
+              a: [16],
+              battery: parseInt(e.target.value),
+            });
+          }}
         ></Form.Control>
       </Form.Group>
       <hr />
