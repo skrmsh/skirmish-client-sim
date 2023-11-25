@@ -1,7 +1,21 @@
+
+
+.logParent {
+    display: flex;
+    flex-direction: column;
+    height: 80vh !important;
+}
+
 .log {
     white-space: pre-wrap;
     font-family: monospace;
     font-size: medium;
     overflow-x: hidden;
-    max-width: 15vw;
+    flex: 1;
+    max-width: 18vw;
+
+}
+
+.logInput {
+    display: inline-block;
 }
