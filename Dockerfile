@@ -9,6 +9,7 @@ COPY tsconfig.json /skirmish-client-sim/
 
 RUN npm install
 
+ENV PUBLIC_URL /client-sim/
 RUN npm run build
 
 #Stage 2
